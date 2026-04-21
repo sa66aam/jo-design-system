@@ -1,0 +1,245 @@
+/* ============================================================
+ * Jo's Design System - Tokens
+ * Bilingual Arabic/English healthcare + accreditation UI.
+ *
+ * All tokens declared as CSS custom properties on :root.
+ * Use them directly in CSS, or read via getComputedStyle().
+ * ============================================================ */
+
+:root {
+  /* --------------------------------------------------------
+   * Typography - two font families, one per script.
+   * Lora: English body + display. Humanist serif, legible at
+   *       small sizes, has real italics, supports tabular nums.
+   * Noto Naskh Arabic: Arabic body + display. Correctly shapes
+   *       ligatures and diacritics. Use exclusively - never
+   *       Amiri, never system Arabic fallback.
+   * -------------------------------------------------------- */
+  --font-en: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-ar: 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-mono: 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Type scale - modular, 1.25 step. Use semantic names, not px. */
+  --text-xs: 0.75rem;    /* 12px - metadata, unit labels                 */
+  --text-sm: 0.875rem;   /* 14px - body in compact surfaces              */
+  --text-base: 1rem;     /* 16px - default body                          */
+  --text-lg: 1.125rem;   /* 18px - sub-titles                            */
+  --text-xl: 1.25rem;    /* 20px - card titles                           */
+  --text-2xl: 1.5rem;    /* 24px - hero h2                               */
+  --text-3xl: 1.875rem;  /* 30px - page headers                          */
+  --text-4xl: 2.25rem;   /* 36px - display                               */
+  --text-5xl: 3rem;      /* 48px - presentation mode                     */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --leading-tight: 1.25;
+  --leading-snug: 1.4;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.12em;    /* uppercase section labels              */
+  --tracking-widest: 0.15em;   /* dropdown section headers              */
+
+  /* --------------------------------------------------------
+   * Neutrals - warm-leaning grays (not the Tailwind cool grays).
+   * Paired with warm gold/brown accents, cool grays fight; these
+   * neutrals sit quietly next to warm brand colors.
+   * -------------------------------------------------------- */
+  --gray-50:  #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  /* --------------------------------------------------------
+   * Accreditation-readiness gradient.
+   * R20-tuned: endpoints 500 Tailwind units apart (amber-900
+   * → amber-400) so the transition is legible on thin (h-1)
+   * strips. Narrowing the span to 100 units reads as flat;
+   * widening past 700 units reads as two-tone sash.
+   * Use on progress bars that indicate a QUANTITATIVE axis
+   * (completeness, readiness, coverage) - not categorical.
+   * -------------------------------------------------------- */
+  --readiness-gradient: linear-gradient(90deg, #78350f 0%, #fbbf24 100%);
+  --readiness-endpoint-from: #78350f;  /* amber-900 */
+  --readiness-endpoint-to:   #fbbf24;  /* amber-400 */
+
+  /* --------------------------------------------------------
+   * Domain palette - 8 chapters × CBAHI PHC standards.
+   * Each domain gets {primary, light, accent, gradient}.
+   * Imported verbatim from CBAHI PHC config.js so any re-skin
+   * of a healthcare dashboard can adopt the same semantics.
+   *
+   * LD  = Leadership           - navy
+   * PC  = Patient Care         - teal
+   * MIS = Medical Information  - purple
+   * LB  = Laboratory           - amber
+   * MM  = Medication Mgmt      - crimson
+   * MOI = Mother/Infant        - forest
+   * IPC = Infection Prevention - indigo
+   * FMS = Facility/Safety      - orange
+   * -------------------------------------------------------- */
+  --ld-primary:  #1e3a5f;  --ld-light:  #e8f4fc;  --ld-accent:  #3498db;
+  --ld-gradient: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%);
+
+  --pc-primary:  #0f766e;  --pc-light:  #f0fdfa;  --pc-accent:  #2dd4bf;
+  --pc-gradient: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+
+  --mis-primary: #6b21a8;  --mis-light: #faf5ff;  --mis-accent: #c084fc;
+  --mis-gradient: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%);
+
+  --lb-primary:  #b45309;  --lb-light:  #fffbeb;  --lb-accent:  #fbbf24;
+  --lb-gradient: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+
+  --mm-primary:  #991b1b;  --mm-light:  #fef2f2;  --mm-accent:  #f87171;
+  --mm-gradient: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+
+  --moi-primary: #166534;  --moi-light: #f0fdf4;  --moi-accent: #4ade80;
+  --moi-gradient: linear-gradient(135deg, #166534 0%, #16a34a 100%);
+
+  --ipc-primary: #312e81;  --ipc-light: #eef2ff;  --ipc-accent: #818cf8;
+  --ipc-gradient: linear-gradient(135deg, #312e81 0%, #4f46e5 100%);
+
+  --fms-primary: #9a3412;  --fms-light: #fff7ed;  --fms-accent: #fb923c;
+  --fms-gradient: linear-gradient(135deg, #9a3412 0%, #ea580c 100%);
+
+  /* --------------------------------------------------------
+   * Semantic score colors.
+   * - Green (met): 85%+ or fully met
+   * - Amber (partial): 60-84% or partially met
+   * - Red (not met): <60% or not met
+   * - Gray (N/A or unknown)
+   * -------------------------------------------------------- */
+  --score-met:      #10b981;   --score-met-bg:      #ecfdf5;
+  --score-partial:  #f59e0b;   --score-partial-bg:  #fffbeb;
+  --score-not-met:  #ef4444;   --score-not-met-bg:  #fef2f2;
+  --score-na:       #94a3b8;   --score-na-bg:       #f8fafc;
+
+  /* --------------------------------------------------------
+   * Glass / translucent surfaces.
+   * The house look: semi-transparent white over blurred
+   * backdrop. Avoid solid white fills on content cards.
+   * -------------------------------------------------------- */
+  --glass-bg:     rgba(255, 255, 255, 0.85);
+  --glass-bg-lo:  rgba(255, 255, 255, 0.80);  /* over complex backdrop */
+  --glass-bg-hi:  rgba(255, 255, 255, 0.92);  /* over plain backdrop  */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.70);
+  --glass-blur:   blur(20px);
+  --glass-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+
+  /* Overlay chrome on colored (gradient) hero bands. */
+  --on-gradient-surface:   rgba(255, 255, 255, 0.22);
+  --on-gradient-surface-2: rgba(255, 255, 255, 0.15);
+  --on-gradient-border:    1px solid rgba(255, 255, 255, 0.40);
+
+  /* --------------------------------------------------------
+   * Hero band - luxe radial palette.
+   * No solid background. The hero composes three anchors
+   * (base, deep, glow) into layered radials, finished with a
+   * low-opacity noise overlay and a hairline top highlight.
+   * Ink colors are warm off-white for body, soft-alpha for
+   * secondary metadata. Never use `--gray-*` on the hero.
+   * -------------------------------------------------------- */
+  --color-hero-base:     #1a2332;                        /* mid anchor */
+  --color-hero-deep:     #0f1822;                        /* outer vignette */
+  --color-hero-glow:     #2d3f56;                        /* inner lift */
+  --color-hero-ink:      #f4ede0;                        /* primary on-hero */
+  --color-hero-ink-soft: rgba(244, 237, 224, 0.62);      /* secondary on-hero */
+
+  /* --------------------------------------------------------
+   * Spacing - restricted scale. Skip sizes between these.
+   * Picks from PHC actual usage, not the full Tailwind grid.
+   * -------------------------------------------------------- */
+  --space-1: 0.25rem;   /*  4px - icon-to-label                     */
+  --space-2: 0.5rem;    /*  8px - within a component                */
+  --space-3: 0.75rem;   /* 12px - default component gap             */
+  --space-4: 1rem;      /* 16px - between tightly-related items     */
+  --space-5: 1.25rem;   /* 20px - card padding, tile gap            */
+  --space-6: 1.5rem;    /* 24px - section padding                   */
+  --space-7: 1.75rem;   /* 28px - card padding (large)              */
+  --space-8: 2rem;      /* 32px - hero band padding                 */
+  --space-10: 2.5rem;   /* 40px - between sections                  */
+  --space-12: 3rem;     /* 48px - page top                          */
+
+  /* --------------------------------------------------------
+   * Radii - the house's three sizes.
+   * 12px: interactive chips, dropdown items
+   * 18px: tiles, cards
+   * 22px: grid cards (outer wrapper)
+   * 24px: hero bands, full-width panels
+   * -------------------------------------------------------- */
+  --radius-sm: 0.5rem;    /*  8px - badge, pill */
+  --radius-md: 0.75rem;   /* 12px - chip, button */
+  --radius-lg: 1.125rem;  /* 18px - tile */
+  --radius-xl: 1.375rem;  /* 22px - card */
+  --radius-2xl: 1.5rem;   /* 24px - hero band */
+  --radius-full: 9999px;  /*        pill, progress bar */
+
+  /* --------------------------------------------------------
+   * Elevation - restrained. Glass cards get the lo-fi shadow;
+   * floating affordances (dropdowns) get the layered one.
+   * -------------------------------------------------------- */
+  --shadow-card:
+    0 2px 12px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover:
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-dropdown:
+    0 25px 60px rgba(0, 0, 0, 0.20),
+    0 8px 24px rgba(0, 0, 0, 0.10);
+
+  /* --------------------------------------------------------
+   * Motion - one easing, two durations. Longer for progress
+   * fills (reads as quantitative growth), shorter for state.
+   * -------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-slow: 700ms;
+  --transition-state: all var(--duration-fast) var(--ease-out);
+  --transition-progress: width var(--duration-slow) var(--ease-out);
+
+  /* --------------------------------------------------------
+   * Z-index - named levels. Do not use magic numbers.
+   * -------------------------------------------------------- */
+  --z-base:      0;
+  --z-card:      1;
+  --z-sticky:    100;
+  --z-dropdown:  1000;
+  --z-overlay:   1500;
+  --z-capsule:   2000;
+  --z-modal:     3000;
+  --z-toast:     4000;
+}
+
+/* ============================================================
+ * Body defaults - pair tokens with a sensible baseline.
+ * ============================================================ */
+body {
+  font-family: var(--font-en);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--gray-800);
+  background: var(--gray-50);
+}
+
+body[dir="rtl"],
+[dir="rtl"] {
+  font-family: var(--font-ar);
+}
+
+/* Bilingual inline: wrap Arabic in [lang="ar"] so it picks up
+ * the Arabic font mid-paragraph without flipping direction. */
+[lang="ar"] {
+  font-family: var(--font-ar);
+}

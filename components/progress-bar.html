@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Progress bar - Jo's Design System</title>
+  <link rel="stylesheet" href="../tokens/tokens.css" />
+  <style>
+    /* ============================================================
+     * Progress bar - the R20-tuned readiness bar.
+     *
+     * Three axes in play: THICKNESS, ENDPOINT CONTRAST, TONAL SPAN.
+     * House default: 4px (h-1) thick, amber-900 → amber-400,
+     * which spans 500 Tailwind units.
+     *
+     * Reads as "quietly quantitative" - the eye feels the
+     * progression without the bar fighting the label next to it.
+     * ============================================================ */
+
+    .demo {
+      font-family: var(--font-en);
+      padding: var(--space-8);
+      background: var(--gray-50);
+      color: var(--gray-800);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .demo h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-semibold);
+      margin: 0 0 var(--space-2);
+    }
+
+    .demo p {
+      font-size: var(--text-sm);
+      color: var(--gray-600);
+      margin: 0 0 var(--space-6);
+      line-height: var(--leading-relaxed);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+
+    .row .label {
+      flex: 0 0 120px;
+      font-size: var(--text-sm);
+      color: var(--gray-700);
+    }
+
+    .row .value {
+      flex: 0 0 48px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: var(--weight-semibold);
+      color: var(--gray-800);
+      font-size: var(--text-sm);
+    }
+
+    /* ------------------------------------------------------------
+     * The bar track.
+     * Height is the "thin" knob. 4px is the house default.
+     * Going to 6px reads as "a bit more emphasis."
+     * Going below 3px loses the gradient at small percentages.
+     * ------------------------------------------------------------ */
+    .bar {
+      flex: 1;
+      position: relative;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--readiness-gradient);
+      border-radius: var(--radius-full);
+      transition: var(--transition-progress);
+    }
+
+    /* ------------------------------------------------------------
+     * Variants for comparison - DO NOT use these in production.
+     * They exist only to demonstrate why the house default is the
+     * house default.
+     * ------------------------------------------------------------ */
+    .bar.variant-thick      { height: 12px; }
+    .bar.variant-narrow     { }
+    .bar.variant-narrow .bar-fill {
+      background: linear-gradient(90deg, #a16207 0%, #ca8a04 100%);
+    }
+    .bar.variant-solid .bar-fill {
+      background: var(--score-met);
+    }
+
+    .section-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--gray-500);
+      margin: var(--space-8) 0 var(--space-3);
+      font-weight: var(--weight-semibold);
+    }
+
+    .note {
+      font-size: var(--text-xs);
+      color: var(--gray-500);
+      margin-top: var(--space-1);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo">
+
+    <h1>Progress bar</h1>
+    <p>The readiness bar, R20-tuned. Thin (4px), wide tonal span (amber-900 &rarr; amber-400), muted enough to sit next to a metric without competing with it.</p>
+
+    <div class="section-label">House default</div>
+
+    <div class="row">
+      <span class="label">Leadership</span>
+      <div class="bar"><div class="bar-fill" style="width: 87%"></div></div>
+      <span class="value">87%</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Patient Care</span>
+      <div class="bar"><div class="bar-fill" style="width: 64%"></div></div>
+      <span class="value">64%</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Medication Mgmt</span>
+      <div class="bar"><div class="bar-fill" style="width: 43%"></div></div>
+      <span class="value">43%</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Infection Prev.</span>
+      <div class="bar"><div class="bar-fill" style="width: 91%"></div></div>
+      <span class="value">91%</span>
+    </div>
+
+    <div class="section-label">Wrong (for reference)</div>
+
+    <div class="row">
+      <span class="label">Too thick</span>
+      <div class="bar variant-thick"><div class="bar-fill" style="width: 64%"></div></div>
+      <span class="value">64%</span>
+    </div>
+    <div class="note">Reads as a category flag, steals attention from the number.</div>
+
+    <div class="row" style="margin-top: var(--space-4)">
+      <span class="label">Too narrow</span>
+      <div class="bar variant-narrow"><div class="bar-fill" style="width: 64%"></div></div>
+      <span class="value">64%</span>
+    </div>
+    <div class="note">Endpoints only 200 Tailwind units apart. The gradient reads as flat.</div>
+
+    <div class="row" style="margin-top: var(--space-4)">
+      <span class="label">Solid fill</span>
+      <div class="bar variant-solid"><div class="bar-fill" style="width: 64%"></div></div>
+      <span class="value">64%</span>
+    </div>
+    <div class="note">Solid color asserts a category (met / not met). Use only when the bar IS the signal.</div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Domain tile - Jo's Design System</title>
+  <link rel="stylesheet" href="../tokens/tokens.css" />
+  <style>
+    /* ============================================================
+     * Domain tile - the per-chapter card.
+     *
+     * Anatomy, top to bottom:
+     *   1. Chapter code badge (small, domain color, outline only).
+     *   2. Chapter title (English) + optional Arabic subtitle.
+     *   3. The readiness bar (thin, amber gradient).
+     *   4. Scoring columns - Met / Partial / Not Met / N/A.
+     *      These are nouns, not verbs: no stagger, no sequence.
+     *
+     * The tile itself is glass: semi-transparent white on top of
+     * a blurred backdrop, with a subtle border and the card shadow.
+     * The left edge carries a 4px domain-color stroke as the only
+     * place inside the body where the chapter's identity appears.
+     * ============================================================ */
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      padding: var(--space-10);
+      font-family: var(--font-en);
+    }
+
+    .grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+
+    .tile {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-card);
+      transition: var(--transition-state);
+      overflow: hidden;
+    }
+
+    .tile:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-1px);
+    }
+
+    /* The 4px domain-color stroke. Only place inside the body
+     * where the chapter's identity shows. */
+    .tile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--stroke, var(--gray-300));
+    }
+
+    /* Header row: code badge + title + optional Arabic. */
+    .tile-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      padding: 0 var(--space-2);
+      height: 1.5rem;
+      border: 1px solid var(--stroke, var(--gray-400));
+      color: var(--stroke, var(--gray-700));
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wide);
+    }
+
+    .title-block {
+      flex: 1;
+    }
+
+    .title-en {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-semibold);
+      color: var(--gray-800);
+      line-height: var(--leading-snug);
+    }
+
+    .title-ar {
+      font-family: var(--font-ar);
+      font-size: var(--text-sm);
+      color: var(--gray-500);
+      margin-top: 2px;
+      line-height: var(--leading-snug);
+      direction: rtl;
+    }
+
+    /* The readiness bar. */
+    .bar {
+      position: relative;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: var(--space-2);
+    }
+
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--readiness-gradient);
+      border-radius: var(--radius-full);
+      transition: var(--transition-progress);
+    }
+
+    .pct-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: var(--space-5);
+    }
+
+    .pct {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      color: var(--gray-800);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .scored {
+      font-size: var(--text-xs);
+      color: var(--gray-500);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Scoring columns: 4-wide grid of noun-like cells. */
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-2);
+    }
+
+    .col {
+      text-align: center;
+      padding: var(--space-2) var(--space-1);
+      border-radius: var(--radius-md);
+      background: var(--col-bg, var(--gray-100));
+    }
+
+    .col-num {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-bold);
+      color: var(--col-fg, var(--gray-700));
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .col-label {
+      font-size: 0.6875rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      margin-top: 2px;
+    }
+
+    .col.met        { --col-fg: var(--score-met);     --col-bg: var(--score-met-bg); }
+    .col.partial    { --col-fg: var(--score-partial); --col-bg: var(--score-partial-bg); }
+    .col.not-met    { --col-fg: var(--score-not-met); --col-bg: var(--score-not-met-bg); }
+    .col.na         { --col-fg: var(--score-na);      --col-bg: var(--score-na-bg); }
+
+    /* Per-domain strokes. Drop-in via a class on the tile. */
+    .tile.ld  { --stroke: var(--ld-primary); }
+    .tile.pc  { --stroke: var(--pc-primary); }
+    .tile.mis { --stroke: var(--mis-primary); }
+    .tile.lb  { --stroke: var(--lb-primary); }
+    .tile.mm  { --stroke: var(--mm-primary); }
+    .tile.moi { --stroke: var(--moi-primary); }
+    .tile.ipc { --stroke: var(--ipc-primary); }
+    .tile.fms { --stroke: var(--fms-primary); }
+  </style>
+</head>
+<body>
+  <div class="grid">
+
+    <div class="tile ld">
+      <div class="tile-header">
+        <div class="title-block">
+          <div class="title-en">Leadership</div>
+          <div class="title-ar">القيادة</div>
+        </div>
+        <span class="code-badge">LD</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: 87%"></div></div>
+      <div class="pct-row">
+        <span class="pct">87%</span>
+        <span class="scored">63 / 72 scored</span>
+      </div>
+      <div class="columns">
+        <div class="col met"><div class="col-num">55</div><div class="col-label">Met</div></div>
+        <div class="col partial"><div class="col-num">5</div><div class="col-label">Partial</div></div>
+        <div class="col not-met"><div class="col-num">3</div><div class="col-label">Not Met</div></div>
+        <div class="col na"><div class="col-num">9</div><div class="col-label">N/A</div></div>
+      </div>
+    </div>
+
+    <div class="tile pc">
+      <div class="tile-header">
+        <div class="title-block">
+          <div class="title-en">Patient Care</div>
+          <div class="title-ar">رعاية المريض</div>
+        </div>
+        <span class="code-badge">PC</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: 64%"></div></div>
+      <div class="pct-row">
+        <span class="pct">64%</span>
+        <span class="scored">41 / 64 scored</span>
+      </div>
+      <div class="columns">
+        <div class="col met"><div class="col-num">26</div><div class="col-label">Met</div></div>
+        <div class="col partial"><div class="col-num">11</div><div class="col-label">Partial</div></div>
+        <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not Met</div></div>
+        <div class="col na"><div class="col-num">23</div><div class="col-label">N/A</div></div>
+      </div>
+    </div>
+
+    <div class="tile mm">
+      <div class="tile-header">
+        <div class="title-block">
+          <div class="title-en">Medication Mgmt</div>
+          <div class="title-ar">إدارة الأدوية</div>
+        </div>
+        <span class="code-badge">MM</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: 43%"></div></div>
+      <div class="pct-row">
+        <span class="pct">43%</span>
+        <span class="scored">19 / 44 scored</span>
+      </div>
+      <div class="columns">
+        <div class="col met"><div class="col-num">8</div><div class="col-label">Met</div></div>
+        <div class="col partial"><div class="col-num">7</div><div class="col-label">Partial</div></div>
+        <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not Met</div></div>
+        <div class="col na"><div class="col-num">25</div><div class="col-label">N/A</div></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

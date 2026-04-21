@@ -1,0 +1,23 @@
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (in case you add tooling later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Local build output (none today, reserved)
+dist/
+build/
+
+# Claude session artifacts that may end up here during drafting
+.sandbox_trash/
+*.tmp

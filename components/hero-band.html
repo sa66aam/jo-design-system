@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hero band - Jo's Design System</title>
+  <link rel="stylesheet" href="../tokens/tokens.css" />
+  <style>
+    /* ============================================================
+     * Hero band - luxe radial surface.
+     *
+     * Three anchors compose the backdrop:
+     *   - hero-glow  lifts the upper-left at 22%/18%
+     *   - hero-deep  vignettes the lower-right at 78%/92%
+     *   - hero-base  fills the midtone between them
+     *
+     * A low-opacity SVG noise layer (6%, overlay blend) breaks
+     * the gradient banding that flat radials produce at print
+     * resolution. A hairline top highlight (1px, ink @ 12%)
+     * reads as reflected light; without it, the top edge goes
+     * muddy against a neutral page.
+     *
+     * Chrome (dropdown, metric panel) sits on a translucent
+     * inner surface so affordances read as applied elements,
+     * not as holes cut in the backdrop.
+     *
+     * Never use `--gray-*` on a hero. Use `--color-hero-ink`
+     * for primary text and `--color-hero-ink-soft` for metadata.
+     * ============================================================ */
+
+    body {
+      background: var(--gray-50);
+      font-family: var(--font-en);
+      margin: 0;
+      padding: var(--space-8);
+      color: var(--gray-800);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ----- luxe radial hero --------------------------------- */
+    .hero {
+      position: relative;
+      isolation: isolate;                 /* contain the noise blend */
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      color: var(--color-hero-ink);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      background-color: var(--color-hero-base);
+      background-image:
+        radial-gradient(ellipse 90% 75% at 22% 18%,
+          color-mix(in oklab, var(--color-hero-glow) 92%, transparent) 0%,
+          color-mix(in oklab, var(--color-hero-glow) 55%, transparent) 28%,
+          transparent 62%),
+        radial-gradient(ellipse 95% 80% at 78% 92%,
+          color-mix(in oklab, var(--color-hero-deep) 95%, transparent) 0%,
+          color-mix(in oklab, var(--color-hero-deep) 65%, transparent) 32%,
+          transparent 70%);
+    }
+
+    /* SVG noise overlay - 6% opacity, blended as overlay so it
+     * adds tooth to the gradient rather than sitting as a film. */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 0 0.88  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    /* Hairline top highlight - 1px, warm ink at low alpha. */
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(244, 237, 224, 0.18) 18%,
+        rgba(244, 237, 224, 0.28) 50%,
+        rgba(244, 237, 224, 0.18) 82%,
+        transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero > * { position: relative; z-index: 2; }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    .breadcrumb {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--color-hero-ink-soft);
+      margin-bottom: var(--space-2);
+    }
+
+    .hero-title {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-tight);
+      margin: 0;
+      line-height: var(--leading-tight);
+      color: var(--color-hero-ink);
+    }
+
+    .hero-subtitle {
+      font-size: var(--text-base);
+      margin-top: var(--space-2);
+      color: var(--color-hero-ink-soft);
+      line-height: var(--leading-snug);
+    }
+
+    /* Dropdown pill on the hero - tinted glass, uses ink color. */
+    .chapters-dropdown { position: relative; }
+
+    .dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      background: rgba(244, 237, 224, 0.08);
+      border: 1px solid rgba(244, 237, 224, 0.22);
+      border-radius: var(--radius-full);
+      color: var(--color-hero-ink);
+      font-family: var(--font-en);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      cursor: pointer;
+      transition: var(--transition-state);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .dropdown-trigger:hover { background: rgba(244, 237, 224, 0.14); }
+
+    .chevron {
+      width: 12px;
+      height: 12px;
+      transition: transform var(--duration-fast) var(--ease-out);
+    }
+
+    .chapters-dropdown.open .chevron { transform: rotate(180deg); }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + var(--space-2));
+      right: 0;
+      min-width: 280px;
+      background: var(--glass-bg-hi);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-dropdown);
+      padding: var(--space-2);
+      z-index: var(--z-dropdown);
+      color: var(--gray-800);
+      display: none;
+    }
+
+    .chapters-dropdown.open .dropdown-menu { display: block; }
+
+    .dropdown-section {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-widest);
+      color: var(--gray-500);
+      padding: var(--space-2) var(--space-3);
+      font-weight: var(--weight-semibold);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition-state);
+      font-size: var(--text-sm);
+    }
+
+    .dropdown-item:hover { background: var(--gray-100); }
+
+    .dropdown-item .code {
+      font-weight: var(--weight-bold);
+      color: var(--gray-500);
+      font-size: var(--text-xs);
+      letter-spacing: var(--tracking-wide);
+      min-width: 30px;
+    }
+
+    .dropdown-item .name { flex: 1; margin: 0 var(--space-3); }
+
+    .dropdown-item .pct {
+      font-variant-numeric: tabular-nums;
+      font-weight: var(--weight-semibold);
+      color: var(--gray-600);
+      font-size: var(--text-xs);
+    }
+
+    /* Inner metric panel - semi-transparent ink-tinted surface
+     * with backdrop blur. Reads as an applied card, not a cut-out. */
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-8);
+      align-items: center;
+      padding: var(--space-6);
+      background: rgba(244, 237, 224, 0.05);
+      border: 1px solid rgba(244, 237, 224, 0.14);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(244, 237, 224, 0.10),
+        0 1px 24px rgba(15, 24, 34, 0.25);
+    }
+
+    .hero-pct {
+      font-size: var(--text-5xl);
+      font-weight: var(--weight-extrabold);
+      letter-spacing: var(--tracking-tight);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--color-hero-ink);
+    }
+
+    .hero-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--color-hero-ink-soft);
+      margin-top: var(--space-1);
+    }
+
+    .hero-bar {
+      position: relative;
+      height: 4px;
+      background: rgba(244, 237, 224, 0.16);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .hero-bar-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      background: var(--readiness-gradient);
+      border-radius: var(--radius-full);
+      transition: var(--transition-progress);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: var(--space-6);
+      margin-top: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--color-hero-ink-soft);
+    }
+
+    .hero-stats span { font-variant-numeric: tabular-nums; }
+    .hero-stats b   { font-weight: var(--weight-bold); color: var(--color-hero-ink); }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="breadcrumb">Center A / Self-assessment</div>
+          <h1 class="hero-title">Leadership</h1>
+          <div class="hero-subtitle">Governance, strategy, and organizational oversight.</div>
+        </div>
+
+        <div class="chapters-dropdown open" id="dropdown">
+          <button class="dropdown-trigger" onclick="document.getElementById('dropdown').classList.toggle('open')">
+            <span>Chapters</span>
+            <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4 L6 8 L10 4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="dropdown-menu">
+            <div class="dropdown-section">All chapters</div>
+            <div class="dropdown-item"><span class="code">LD</span><span class="name">Leadership</span><span class="pct">87%</span></div>
+            <div class="dropdown-item"><span class="code">PC</span><span class="name">Patient Care</span><span class="pct">64%</span></div>
+            <div class="dropdown-item"><span class="code">MIS</span><span class="name">Medical Information</span><span class="pct">72%</span></div>
+            <div class="dropdown-item"><span class="code">LB</span><span class="name">Laboratory</span><span class="pct">58%</span></div>
+            <div class="dropdown-item"><span class="code">MM</span><span class="name">Medication Mgmt</span><span class="pct">43%</span></div>
+            <div class="dropdown-item"><span class="code">MOI</span><span class="name">Mother/Infant</span><span class="pct">79%</span></div>
+            <div class="dropdown-item"><span class="code">IPC</span><span class="name">Infection Prevention</span><span class="pct">91%</span></div>
+            <div class="dropdown-item"><span class="code">FMS</span><span class="name">Facility/Safety</span><span class="pct">66%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-metrics">
+        <div>
+          <div class="hero-pct">87%</div>
+          <div class="hero-label">Readiness</div>
+        </div>
+        <div>
+          <div class="hero-bar"><div class="hero-bar-fill" style="width: 87%"></div></div>
+          <div class="hero-stats">
+            <span><b>55</b> Met</span>
+            <span><b>5</b> Partial</span>
+            <span><b>3</b> Not Met</span>
+            <span><b>9</b> N/A</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

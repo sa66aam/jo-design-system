@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demo - Jo's Design System in assembly</title>
+  <link rel="stylesheet" href="../tokens/tokens.css" />
+  <style>
+    /* Full dashboard page composed from the pieces. Load this to
+     * see how hero-band + 8 domain tiles read together. */
+
+    body {
+      margin: 0;
+      padding: var(--space-8);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      font-family: var(--font-en);
+      color: var(--gray-800);
+    }
+
+    .page { max-width: 1200px; margin: 0 auto; }
+
+    /* --- Hero band: luxe radial ---
+     * Three anchors (base/glow/deep) composed into layered
+     * radials + 6% noise overlay + hairline top highlight.
+     * Ink tokens replace the generic white/opacity pattern. */
+    .hero {
+      position: relative;
+      isolation: isolate;
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      color: var(--color-hero-ink);
+      background-color: var(--color-hero-base);
+      background-image:
+        radial-gradient(ellipse 90% 75% at 22% 18%,
+          color-mix(in oklab, var(--color-hero-glow) 92%, transparent) 0%,
+          color-mix(in oklab, var(--color-hero-glow) 55%, transparent) 28%,
+          transparent 62%),
+        radial-gradient(ellipse 95% 80% at 78% 92%,
+          color-mix(in oklab, var(--color-hero-deep) 95%, transparent) 0%,
+          color-mix(in oklab, var(--color-hero-deep) 65%, transparent) 32%,
+          transparent 70%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 0 0.88  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(244, 237, 224, 0.18) 18%,
+        rgba(244, 237, 224, 0.28) 50%,
+        rgba(244, 237, 224, 0.18) 82%,
+        transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero > * { position: relative; z-index: 2; }
+
+    .hero-title {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-tight);
+      margin: 0 0 var(--space-2);
+      color: var(--color-hero-ink);
+    }
+
+    .hero-subtitle {
+      font-size: var(--text-base);
+      color: var(--color-hero-ink-soft);
+      margin-bottom: var(--space-6);
+    }
+
+    /* Inner metric panel - translucent ink surface with blur */
+    .hero-metric-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-8);
+      align-items: center;
+      padding: var(--space-6);
+      background: rgba(244, 237, 224, 0.05);
+      border: 1px solid rgba(244, 237, 224, 0.14);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(244, 237, 224, 0.10),
+        0 1px 24px rgba(15, 24, 34, 0.25);
+    }
+
+    .hero-pct {
+      font-size: var(--text-5xl);
+      font-weight: var(--weight-extrabold);
+      letter-spacing: var(--tracking-tight);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--color-hero-ink);
+    }
+
+    .hero-meta {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--color-hero-ink-soft);
+      margin-top: var(--space-1);
+    }
+
+    .hero-bar {
+      position: relative;
+      height: 4px;
+      background: rgba(244, 237, 224, 0.16);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: var(--space-3);
+    }
+
+    .hero-bar-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      background: var(--readiness-gradient);
+      border-radius: var(--radius-full);
+    }
+
+    .hero-counts {
+      display: flex;
+      gap: var(--space-6);
+      font-size: var(--text-sm);
+      color: var(--color-hero-ink-soft);
+    }
+
+    .hero-counts span { font-variant-numeric: tabular-nums; }
+    .hero-counts b { font-weight: var(--weight-bold); color: var(--color-hero-ink); }
+
+    .hero-ts {
+      text-align: right;
+      font-size: var(--text-xs);
+      color: var(--color-hero-ink-soft);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* --- Domain tile grid --- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-5);
+    }
+
+    @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .tile {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-card);
+      transition: var(--transition-state);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .tile:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-1px);
+    }
+
+    .tile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--stroke, var(--gray-300));
+    }
+
+    .tile-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      padding: 0 var(--space-2);
+      height: 1.5rem;
+      border: 1px solid var(--stroke, var(--gray-400));
+      color: var(--stroke, var(--gray-700));
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wide);
+    }
+
+    .title-en {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: var(--gray-800);
+      line-height: var(--leading-snug);
+    }
+
+    .title-ar {
+      font-family: var(--font-ar);
+      font-size: var(--text-xs);
+      color: var(--gray-500);
+      margin-top: 2px;
+      direction: rtl;
+    }
+
+    .bar {
+      position: relative;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: var(--space-2);
+    }
+
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--readiness-gradient);
+      border-radius: var(--radius-full);
+    }
+
+    .pct-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+
+    .pct {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .scored {
+      font-size: var(--text-xs);
+      color: var(--gray-500);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-2);
+    }
+
+    .col {
+      text-align: center;
+      padding: var(--space-2) var(--space-1);
+      border-radius: var(--radius-md);
+      background: var(--col-bg, var(--gray-100));
+    }
+
+    .col-num {
+      font-size: var(--text-base);
+      font-weight: var(--weight-bold);
+      color: var(--col-fg, var(--gray-700));
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .col-label {
+      font-size: 0.625rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      margin-top: 2px;
+    }
+
+    .col.met     { --col-fg: var(--score-met);     --col-bg: var(--score-met-bg); }
+    .col.partial { --col-fg: var(--score-partial); --col-bg: var(--score-partial-bg); }
+    .col.not-met { --col-fg: var(--score-not-met); --col-bg: var(--score-not-met-bg); }
+    .col.na      { --col-fg: var(--score-na);      --col-bg: var(--score-na-bg); }
+
+    .tile.ld  { --stroke: var(--ld-primary); }
+    .tile.pc  { --stroke: var(--pc-primary); }
+    .tile.mis { --stroke: var(--mis-primary); }
+    .tile.lb  { --stroke: var(--lb-primary); }
+    .tile.mm  { --stroke: var(--mm-primary); }
+    .tile.moi { --stroke: var(--moi-primary); }
+    .tile.ipc { --stroke: var(--ipc-primary); }
+    .tile.fms { --stroke: var(--fms-primary); }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <div class="hero">
+      <h1 class="hero-title">Center A - Self-assessment</h1>
+      <div class="hero-subtitle">570 standards across 8 CBAHI chapters. Last synced a moment ago.</div>
+
+      <div class="hero-metric-row">
+        <div>
+          <div class="hero-pct">71%</div>
+          <div class="hero-meta">Overall readiness</div>
+        </div>
+        <div>
+          <div class="hero-bar"><div class="hero-bar-fill" style="width: 71%"></div></div>
+          <div class="hero-counts">
+            <span><b>298</b> Met</span>
+            <span><b>64</b> Partial</span>
+            <span><b>31</b> Not Met</span>
+            <span><b>177</b> N/A</span>
+          </div>
+        </div>
+        <div class="hero-ts">
+          Last updated<br/>2026-04-20 · 14:32
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="tile ld">
+        <div class="tile-header">
+          <div><div class="title-en">Leadership</div><div class="title-ar">القيادة</div></div>
+          <span class="code-badge">LD</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 87%"></div></div>
+        <div class="pct-row"><span class="pct">87%</span><span class="scored">63/72</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">55</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">5</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">3</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">9</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile pc">
+        <div class="tile-header">
+          <div><div class="title-en">Patient Care</div><div class="title-ar">رعاية المريض</div></div>
+          <span class="code-badge">PC</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 64%"></div></div>
+        <div class="pct-row"><span class="pct">64%</span><span class="scored">41/64</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">26</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">11</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">23</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile mis">
+        <div class="tile-header">
+          <div><div class="title-en">Medical Info</div><div class="title-ar">المعلومات الطبية</div></div>
+          <span class="code-badge">MIS</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 72%"></div></div>
+        <div class="pct-row"><span class="pct">72%</span><span class="scored">47/65</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">34</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">9</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">18</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile lb">
+        <div class="tile-header">
+          <div><div class="title-en">Laboratory</div><div class="title-ar">المختبر</div></div>
+          <span class="code-badge">LB</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 58%"></div></div>
+        <div class="pct-row"><span class="pct">58%</span><span class="scored">29/50</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">17</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">8</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">21</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile mm">
+        <div class="tile-header">
+          <div><div class="title-en">Medication Mgmt</div><div class="title-ar">إدارة الأدوية</div></div>
+          <span class="code-badge">MM</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 43%"></div></div>
+        <div class="pct-row"><span class="pct">43%</span><span class="scored">19/44</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">8</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">7</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">4</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">25</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile moi">
+        <div class="tile-header">
+          <div><div class="title-en">Mother / Infant</div><div class="title-ar">الأم والطفل</div></div>
+          <span class="code-badge">MOI</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 79%"></div></div>
+        <div class="pct-row"><span class="pct">79%</span><span class="scored">38/48</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">30</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">6</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">2</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">10</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile ipc">
+        <div class="tile-header">
+          <div><div class="title-en">Infection Prev.</div><div class="title-ar">مكافحة العدوى</div></div>
+          <span class="code-badge">IPC</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 91%"></div></div>
+        <div class="pct-row"><span class="pct">91%</span><span class="scored">52/57</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">48</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">3</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">1</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">5</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+      <div class="tile fms">
+        <div class="tile-header">
+          <div><div class="title-en">Facility / Safety</div><div class="title-ar">المرافق والسلامة</div></div>
+          <span class="code-badge">FMS</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: 66%"></div></div>
+        <div class="pct-row"><span class="pct">66%</span><span class="scored">37/56</span></div>
+        <div class="columns">
+          <div class="col met"><div class="col-num">24</div><div class="col-label">Met</div></div>
+          <div class="col partial"><div class="col-num">10</div><div class="col-label">Part</div></div>
+          <div class="col not-met"><div class="col-num">3</div><div class="col-label">Not</div></div>
+          <div class="col na"><div class="col-num">19</div><div class="col-label">N/A</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
