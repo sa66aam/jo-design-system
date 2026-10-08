@@ -1,0 +1,127 @@
+/* ═══ لغة الورق: رموز النواة ورموز العائلة (مرجع يُنسخ، لا يستورده التطبيق) ═══
+   البيت: «Lessons and Guides/DESIGN_LANGUAGE_BUILD_GUIDE.md» الجزء أ (النواة) والجزء ب (طبقة التنويع).
+   كلّ قيمة هنا منسوخة من ملفّها المسمّى في تعليقها، والملفّ هو الحقّ عند الاختلاف.
+   مشروع جديد ينسخ هذا الملفّ كما هو، ويبدّل كتلة «العائلة» وحدها؛ كتلة «النواة» لا تُمسّ.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── النواة: ثابتة في كلّ مشروع من العائلة ── */
+
+  /* الورقة ومكتبها: الفرق يُقاس رقما ولا يقلّ عن 1.08 (الدليل §13-هـ، src/styles/coach2.css قسم 164) */
+  --paper:#fffdf8;
+  --paper-edge:rgba(176,150,96,.46);
+  --paper-hair:rgba(196,176,128,.34);                       /* حدّ ورقة الشبكة (product.css قسم 145) */
+  --paper-shadow:0 1px 2px rgba(74,63,46,.09), 0 10px 26px -16px rgba(74,63,46,.36);
+
+  /* الورق الناهض: ما يُلمس (الدليل §15-ج 1، src/styles/product.css قسم 171-ب) */
+  --lift-face:linear-gradient(180deg, #fffefb, #fbf6ec);
+  --lift:inset 0 1px 0 #fff, 0 1px 2px rgba(74,63,46,.10), 0 8px 18px -10px rgba(74,63,46,.5);
+  --lift-hover:inset 0 1px 0 #fff, 0 2px 4px rgba(74,63,46,.12), 0 14px 26px -12px rgba(74,63,46,.55);
+  --lift-press:inset 0 1px 2px rgba(74,63,46,.14), 0 1px 1px rgba(74,63,46,.08);
+  --chip-lift:inset 0 1px 0 #fff, 0 1px 2px rgba(74,63,46,.10), 0 6px 12px -8px rgba(74,63,46,.45);   /* src/styles/gem.css */
+
+  /* اللؤلؤ: النافذة وختمها (الدليل §13-ع، src/styles/dialog.css) */
+  --pearl:linear-gradient(180deg, #fffefb, #fdf9f1 62%, #faf4e8);
+  --pearl-edge:rgba(176,150,96,.42);
+  --pearl-shadow:0 34px 64px -26px rgba(74,63,46,.62);
+  --veil:radial-gradient(110% 80% at 50% 42%, rgba(255,251,242,.34), rgba(74,63,46,.44) 78%);
+
+  /* الظلّ دافئ دائما: عائلة rgba(74,63,46)، ولا rgba(0,0,0) على سطح جديد (الدليل §2) */
+  --warm:74,63,46;
+
+  /* الحركة: منحنى السباحة، والدخول يسكن بعد أن يقول ما تغيّر (الدليل §7، §15-ج 14) */
+  --ease:cubic-bezier(.2,.7,.3,1);
+
+  /* ── العائلة: هذه الكتلة وحدها تتبدّل بين مشروع وآخر (الجزء ب) ── */
+
+  /* حبر الصفحة */
+  --ink:#173039;                 /* src/styles/naif.css */
+  --ink-2:#4f4738;               /* متن ورقة القرار */
+  --muted:#6b7472;
+
+  /* المكتب: أربع درجات تُكمَّم من رسم القسم، ولا تُخترع (الدليل §15-ج 11) */
+  --pg-base:#f3ede2; --pg1:#dcd3c2; --pg2:#ece4d2; --pg3:#b9a98d;
+  --desk:#f2ece0;                /* الاحتياط الوحيد للمكتب، لا يُصمَّم عليه (الجزء ج) */
+
+  /* بيت الفعل: الزرّ المصبوغ الواحد، والسجلّ والمستشار */
+  --house:#0e7d86; --house-2:#0b656d;
+
+  /* معدن التوقيع: الذهب في القمّة (الدليل §3، §13) */
+  --sig:#b8912e; --sig-2:#8a6d1f; --sig-lite:#e5c461;
+
+  /* نبرة الحكم: هادئة، وكلمتها تُقرأ على غسلتها بنسبة 4.5 (الدليل §13-و) */
+  --ok:#3f7354; --bad:#a8483f; --bad-ink:#8a3831; --watch:#b36b2c; --chance:#b8912a; --nodata:#64748b;
+
+  /* نغمات الأقسام: من البنك الصامت (الدليل §10b، src/components/home/stations.js) */
+  --t-level:#B5874A; --t-models:#7E5F92; --t-errors:#9C5E2F; --t-fresh:#5C8567; --t-focus:#5378A0;
+  --t-record:#0b656d; --t-golden:#8a6d1f;
+
+  /* خطّ العرض للعناوين وحدها، وخطّ الأرقام (الدليل §9، §13) */
+  --f-display:'Thmanyah Serif Display', var(--f, 'Noto Naskh Arabic', serif);
+  --f-num:'Lora', var(--f, serif);
+}
+
+/* ── وصفات النواة بالرموز (مقتطفات تُنسخ؛ القيم الأصليّة في ملفّاتها) ── */
+
+/* الورقة على مكتبها */
+.pl-paper{ background:var(--paper); border:1px solid var(--paper-edge); border-radius:22px; box-shadow:var(--paper-shadow) }
+
+/* ما يُلمس ينهض، ويُضغط، ويرتفع عند المرور على أجهزة المرور وحدها */
+.pl-lift{ background:var(--lift-face); border:1px solid var(--paper-edge); border-radius:15px; box-shadow:var(--lift);
+  transition:transform .18s var(--ease), box-shadow .2s, border-color .2s }
+@media (hover:hover){ .pl-lift:hover{ transform:translateY(-1.5px); box-shadow:var(--lift-hover) } }
+.pl-lift:active{ transform:translateY(.5px); box-shadow:var(--lift-press) }
+
+/* المختار: ورقة ناهضة بخطّ نغمته في القاع، لا تعبئة (الدليل §15-ب 3) */
+.pl-lift.on{ box-shadow:inset 0 -3px 0 var(--tone, var(--house)), var(--lift) }
+
+/* الزرّ المصبوغ الواحد في الصفحة (الدليل §15-ج 3) */
+.pl-dyed{ color:#fff; border:1px solid var(--tone-2, var(--house-2)); border-radius:15px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--tone, var(--house)) 84%, #fff) 0%, var(--tone, var(--house)) 48%, var(--tone-2, var(--house-2)) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 1px 2px color-mix(in srgb, var(--tone-2, var(--house-2)) 45%, transparent),
+    0 12px 22px -12px color-mix(in srgb, var(--tone-2, var(--house-2)) 85%, transparent) }
+
+/* العنوان بخطّ العرض وخطّ قلمه تحته، لاسم قصير (الدليل §13) */
+.pl-mark{ font-family:var(--f-display); font-weight:700; font-feature-settings:'salt' 1;
+  background-image:linear-gradient(transparent 60%, color-mix(in srgb, var(--tone, var(--sig)) 20%, transparent) 60%, color-mix(in srgb, var(--tone, var(--sig)) 20%, transparent) 88%, transparent 88%) }
+/* والجملة التي تلتفّ: خطّ قلم قصير تحتها لا شريط تحت كلّ سطر (الدليل §13-ج إضافة 210) */
+.pl-pen::after{ content:''; display:block; width:46px; height:4px; margin-top:8px; border-radius:99px; background:var(--tone, var(--sig)) }
+
+/* الشبح: رقم أو رمز يرسمه النمط لا النصّ، بعُشر النغمة في الجهة البعيدة (الدليل §13) */
+.pl-ghost{ position:relative; overflow:hidden; isolation:isolate }
+.pl-ghost::after{ content:attr(data-n); content:attr(data-n) / ""; position:absolute; z-index:-1; inset-inline-end:18px; bottom:-34px;
+  font-family:var(--f-display); font-size:150px; line-height:1; color:var(--tone, var(--sig)); opacity:.1 }
+
+/* الغسلة من الركن: هويّة الورقة بلونها، بدل الشريط على طرفها (الدليل §2d) */
+.pl-wash{ background:radial-gradient(ellipse 46% 72% at 100% 0%, color-mix(in srgb, var(--tone) 13%, transparent), color-mix(in srgb, var(--tone) 4%, transparent) 55%, transparent 100%), var(--paper) }
+
+/* الرسم في خانته: يُحتوى كاملا، ويُطبع بالضرب، ولا يعبر إلى الكلام (الدليل §13، src/styles/product.css .st2-art) */
+.pl-card{ position:relative; isolation:isolate; overflow:hidden }
+.pl-art{ position:absolute; z-index:-2; top:14px; left:14px; width:calc(34% - 14px); height:calc(100% - 28px);
+  object-fit:contain; object-position:left center; mix-blend-mode:multiply }
+/* والدمغة في الرأس: نفس الرسم بثلث حبره يذوب من ركنه (src/styles/picker.css .pk-ghost) */
+.pl-stamp{ position:absolute; z-index:-1; top:-6px; left:-6px; width:32%; height:calc(100% + 6px);
+  object-fit:contain; object-position:left top; mix-blend-mode:multiply; opacity:.34; pointer-events:none;
+  mask-image:radial-gradient(120% 120% at 0% 0%, #000 55%, transparent 100%) }
+
+/* المكتب المائيّ من درجات الرسم (الدليل §15-ج 11): طبقة ثابتة خلف الصفحة */
+.pl-desk::before{ content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(62% 48% at 96% 6%, color-mix(in srgb, var(--pg1) 92%, transparent), color-mix(in srgb, var(--pg1) 40%, transparent) 46%, transparent 72%),
+    radial-gradient(64% 50% at 96% 6%, transparent 63%, color-mix(in srgb, var(--pg3) 26%, transparent) 69%, transparent 74%),
+    radial-gradient(58% 44% at 4% 96%, color-mix(in srgb, var(--pg2) 96%, transparent), color-mix(in srgb, var(--pg2) 45%, transparent) 50%, transparent 76%),
+    radial-gradient(circle at 4% 62%, color-mix(in srgb, var(--pg3) 60%, transparent) 0 4px, transparent 5px),
+    radial-gradient(circle at 7.5% 58%, color-mix(in srgb, var(--pg3) 45%, transparent) 0 2.5px, transparent 3.5px),
+    radial-gradient(80% 60% at 50% 55%, color-mix(in srgb, var(--pg1) 24%, transparent), transparent 70%),
+    var(--pg-base) }
+
+/* الشارة الواحدة: ورقة صغيرة بحبر الصفحة وجوهرة الحال قبل الكلمة (الدليل §15-ج 2-ز، src/styles/gem.css) */
+.pl-chip{ --gm:var(--muted); display:inline-flex; align-items:center; gap:7px; padding:5px 13px 5px 12px; border-radius:999px;
+  font-size:12.5px; font-weight:800; color:var(--ink); border:1px solid rgba(176,150,96,.42); background:var(--lift-face); box-shadow:var(--chip-lift) }
+.pl-chip::before{ content:''; width:8px; height:8px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--gm) 35%, #fff), var(--gm) 70%);
+  box-shadow:0 0 0 2.5px color-mix(in srgb, var(--gm) 16%, transparent) }
+
+/* الحركة تسكن لمن طلب حركة أقلّ، دائما */
+@media (prefers-reduced-motion:reduce){ .pl-lift, .pl-dyed{ transition:none } }
+@media (forced-colors:active){ .pl-desk::before{ background:Canvas } .pl-art, .pl-stamp{ display:none } }

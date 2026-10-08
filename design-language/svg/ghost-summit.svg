@@ -1,0 +1,8 @@
+<!-- دمغة شبحيّة مرسومة (بديل الرسم حين لا صورة): خطّ رفيع، تُطبع بعُشر إلى سدس النغمة في الركن البعيد، مائلة قليلا
+     (src/styles/product.css .st2-ghost: opacity .16، rotate(-8deg)). مثال القمّة: القمّة والجوهرة. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10 98 46 40l14 20 12-16 38 54Z"/>
+  <path d="M38 53l8 6 6-8 8 9"/>
+  <path d="M60 22l5 8-5 8-5-8Z"/>
+  <path d="M14 106h92" opacity=".5"/>
+</svg>

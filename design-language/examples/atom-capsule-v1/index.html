@@ -1,0 +1,514 @@
+<title>كبسولة الذرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one Arabic reading column (~36rem) on watercolour paper, paintings break out to ~66rem;
+   chapters hang from the book's ribbon bookmark; a sticky school ruler maps the 45-minute class. */
+:root {
+  --paper: #F6F1E7;
+  --print: #F6F1E7;          /* paintings always sit on paper, in both themes */
+  --card: #FFFCF6;
+  --ink: #2B241F;            /* the same sepia as the pen in the paintings */
+  --ink-2: #5A5047;
+  --muted: #857a6e;
+  --rule: #DCD2C1;
+  --gold: rgba(196, 176, 128, .55);   /* the platform's hairline */
+  --teal: #2F6670;           /* flask liquid, as text-safe accent */
+  --teal-wash: rgba(47, 102, 112, .10);
+  --brick: #A6533B;          /* the ribbon bookmark */
+  --on-brick: #FFF8EE;
+  --e-dot: #2F6FA8;
+  --tape: #EBD9A6;
+  --frame-pad: 0px; --frame-shadow: none;
+  --f-ar: "Noto Naskh Arabic", "Geeza Pro", "Times New Roman", serif;
+  --f-lat: "Lora", Georgia, "Times New Roman", serif;
+  --col: 36rem; --wide: 66rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1B1815; --card: #24201C; --ink: #EDE5D9; --ink-2: #C5BBAE; --muted: #9A8F82;
+    --rule: #3A332C; --gold: rgba(196, 176, 128, .35); --teal: #7FB6BF; --teal-wash: rgba(127, 182, 191, .14);
+    --brick: #B8654B; --on-brick: #FFF8EE; --e-dot: #6FA2D6; --tape: #8A7A4E;
+    --frame-pad: 12px; --frame-shadow: 0 18px 44px rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1B1815; --card: #24201C; --ink: #EDE5D9; --ink-2: #C5BBAE; --muted: #9A8F82;
+  --rule: #3A332C; --gold: rgba(196, 176, 128, .35); --teal: #7FB6BF; --teal-wash: rgba(127, 182, 191, .14);
+  --brick: #B8654B; --on-brick: #FFF8EE; --e-dot: #6FA2D6; --tape: #8A7A4E;
+  --frame-pad: 12px; --frame-shadow: 0 18px 44px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 5.5rem; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 1.16rem/1.95 var(--f-ar); -webkit-font-smoothing: antialiased;
+}
+.lat, .num { font-family: var(--f-lat); font-variant-numeric: tabular-nums; }
+.wrap { padding-inline: 20px; padding-block: 0 3rem; }
+.col { max-width: var(--col); margin-inline: auto; }
+.wide { max-width: var(--wide); margin-inline: auto; }
+.col > p { margin: 0 0 1.1em; text-wrap: pretty; }
+strong { font-weight: 700; color: var(--ink); }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 2px; }
+
+/* ---------- the school ruler ---------- */
+.rulerbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+  display: grid; grid-template-columns: minmax(10rem, 14rem) 1fr; gap: 14px; align-items: center;
+  padding: 7px 20px 6px;
+}
+.r-read { line-height: 1.25; min-width: 0; }
+.r-time { font: 600 1.05rem var(--f-ar); white-space: nowrap; }
+.r-time .num { font-weight: 600; }
+.r-sec { font-size: .85rem; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#ruler { display: block; width: 100%; height: 40px; cursor: pointer; touch-action: pan-y; }
+#ruler text { font: 500 10px var(--f-lat); fill: var(--ink-2); }
+#ruler .sec-mark { fill: var(--brick); }
+@media (max-width: 640px) {
+  .rulerbar { grid-template-columns: 1fr; gap: 0; padding: 5px 16px 3px; }
+  .r-read { display: flex; gap: .7rem; align-items: baseline; }
+  #ruler { height: 34px; }
+}
+
+/* ---------- hero ---------- */
+.hero { padding-block: 2.8rem .6rem; }
+.kicker { font: 600 .86rem var(--f-ar); color: var(--teal); margin: 0 0 .9rem; letter-spacing: 0; }
+.kicker .num { font-weight: 600; }
+h1 { font: 700 clamp(2.5rem, 7vw, 4.4rem)/1.25 var(--f-ar); margin: 0 0 .9rem; text-wrap: balance; }
+.dek { font: 400 clamp(1.15rem, 2.3vw, 1.38rem)/1.8 var(--f-ar); color: var(--ink-2); margin: 0 0 1.2rem; max-width: 33rem; text-wrap: pretty; }
+.byline { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; font-size: .9rem; color: var(--muted); }
+.byline b { color: var(--ink-2); font-weight: 600; }
+
+/* ---------- paintings ---------- */
+figure { margin: 0; }
+.paint { margin-block: 2rem 2.4rem; }
+.frame { background: var(--print); padding: var(--frame-pad); box-shadow: var(--frame-shadow); border-radius: 3px; }
+.stage { position: relative; background: var(--print); isolation: isolate; overflow: hidden; direction: ltr; }
+.stage img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; user-select: none; -webkit-user-drag: none; }
+.stage img.ly { position: absolute; inset: 0; height: 100%; pointer-events: none; }
+figcaption { font: 400 .93rem/1.75 var(--f-ar); color: var(--muted); margin-top: .65rem; max-width: var(--col); margin-inline: auto; }
+
+/* arrival 1: the wash blooms onto the paper */
+.bleed { -webkit-mask: url(img/bleed.png) 50% 50% / 270% auto no-repeat; mask: url(img/bleed.png) 50% 50% / 270% auto no-repeat; }
+.js .bleed.pre { -webkit-mask-size: 1% auto; mask-size: 1% auto; }
+.bleed { transition: -webkit-mask-size 2s cubic-bezier(.5, .05, .4, 1), mask-size 2s cubic-bezier(.5, .05, .4, 1); }
+/* arrival 2: the pencil drawing develops into colour */
+.develop { transition: filter 2.4s cubic-bezier(.45, .05, .35, 1) .15s; }
+.js .develop.pre { filter: grayscale(1) sepia(.3) contrast(1.12); }
+
+/* moving layers */
+@keyframes glow { 0%,100% { opacity: .55 } 35% { opacity: .78 } 60% { opacity: .62 } 80% { opacity: .74 } }
+@keyframes steam { 0% { transform: translateY(0); opacity: .0 } 25% { opacity: .9 } 100% { transform: translateY(-3.5%); opacity: 0 } }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes flame { 0%,100% { transform: scale(1, 1) } 30% { transform: scale(.96, 1.06) } 55% { transform: scale(1.03, .95) } 80% { transform: scale(.98, 1.04) } }
+@keyframes rise { 0% { transform: translateY(0); opacity: 0 } 20% { opacity: 1 } 100% { transform: translateY(-6%); opacity: 0 } }
+.ly.glow { animation: glow 5.5s ease-in-out infinite; }
+.ly.steam { animation: steam 4.2s ease-out infinite; }
+.ly.e1 { animation: spin 14s linear infinite; }
+.ly.e2 { animation: spin 26s linear infinite reverse; }
+.ly.e3 { animation: spin 40s linear infinite; }
+.ly.flame { transform-origin: 39.2% 46.7%; animation: flame 1.6s ease-in-out infinite; }
+.ly.bubbles { animation: rise 3.2s ease-out infinite; }
+
+/* phones: the wide lab painting takes the screen and the view travels across it */
+.pinbox { position: relative; }
+@media (max-width: 700px) {
+  figure.paint.pin { margin-inline: -20px; height: 220vh; height: 220svh; }
+  figure.paint.pin .pinbox { position: sticky; top: var(--barH, 56px); height: calc(100svh - var(--barH, 56px)); display: flex; flex-direction: column; }
+  figure.paint.pin .frame { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; padding: 0; box-shadow: none; border-radius: 0; }
+  figure.paint.pin .stage { position: absolute; left: 0; top: 0; height: 100%; width: auto; max-width: none; aspect-ratio: 8 / 3; will-change: transform; }
+  figure.paint.pin .stage img { height: 100%; width: 100%; }
+  figure.paint.pin figcaption { margin: 0; padding: .6rem 20px .8rem; background: var(--paper); border-top: 1px solid var(--rule); max-width: none; }
+}
+
+/* ---------- chapter heads: the book's ribbon bookmark ---------- */
+.chapter { padding-top: 3rem; }
+.ch-head { display: flex; gap: 1.1rem; align-items: flex-start; margin-bottom: 1.3rem; }
+.ribbon {
+  flex: none; width: 3.1rem; padding: .9rem 0 1.35rem; text-align: center; margin-top: -.4rem;
+  background: var(--brick); color: var(--on-brick);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  font: 600 1.75rem/1 var(--f-lat);
+}
+.ch-meta { font-size: .86rem; color: var(--muted); margin: .1rem 0 .15rem; }
+.ch-meta .num { color: var(--teal); }
+h2 { font: 700 clamp(1.7rem, 4.2vw, 2.45rem)/1.35 var(--f-ar); margin: 0; text-wrap: balance; }
+
+/* ---------- the cheat card (the coach's index card) ---------- */
+.cheat {
+  display: grid; grid-template-columns: minmax(8.5rem, 10.5rem) 1fr;
+  background: var(--card); border: 1px solid var(--gold); border-radius: 6px;
+  box-shadow: 0 10px 32px -20px rgba(74, 63, 46, .32);
+  margin: 2rem 0 2.2rem; overflow: hidden;
+}
+.cheat-big { padding: 1rem 1rem; border-inline-end: 1px dashed var(--rule); display: flex; flex-direction: column; justify-content: center; min-width: 0; background: var(--card); }
+.big { font: 700 2.25rem/1.05 var(--f-lat); color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; direction: ltr; text-align: right; }
+.big.tight { font-size: 1.7rem; }
+.unit { font-size: .86rem; line-height: 1.5; color: var(--ink-2); margin-top: .4rem; }
+.cheat-body { padding: .85rem 1.15rem .9rem; min-width: 0; }
+.eye { font: 700 .82rem var(--f-ar); color: var(--teal); }
+.eye.trap { color: var(--brick); }
+.cheat-body p { margin: .15rem 0 .45rem; font: 500 1.08rem/1.9 var(--f-ar); text-wrap: pretty; }
+.sku { font: 500 .74rem var(--f-lat); color: var(--muted); letter-spacing: .04em; direction: ltr; text-align: right; }
+@media (max-width: 520px) {
+  .cheat { grid-template-columns: 1fr; }
+  .cheat-big { border-inline-end: 0; border-bottom: 1px dashed var(--rule); flex-direction: row; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .unit { margin-top: 0; }
+}
+
+/* ---------- the stadium explorer ---------- */
+.explore { margin-block: 2.2rem 2.6rem; }
+.ex-title { font: 700 1.15rem var(--f-ar); margin: 0; }
+.ex-sub { font-size: .95rem; color: var(--ink-2); margin: .1rem 0 .8rem; }
+.ex-card { background: var(--card); border: 1px solid var(--gold); border-radius: 6px; box-shadow: 0 10px 32px -20px rgba(74, 63, 46, .32); padding: 1rem 1.1rem 1.1rem; }
+.ex-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 15rem); gap: 1rem 1.4rem; align-items: center; }
+@media (max-width: 620px) { .ex-grid { grid-template-columns: 1fr; } }
+#atomSvg { width: 100%; height: auto; display: block; max-width: 22rem; margin-inline: auto; }
+#atomSvg .ring { fill: none; stroke: var(--rule); stroke-width: 1.4; }
+#atomSvg .ring.on { stroke: var(--ink-2); }
+#atomSvg .nuc { fill: var(--brick); }
+#atomSvg .nuc-t { fill: var(--on-brick); font: 700 15px var(--f-lat); }
+#atomSvg .e { fill: var(--e-dot); }
+#atomSvg .e.last { fill: var(--brick); }
+.ctrl label { display: block; font-size: .92rem; color: var(--ink-2); margin-bottom: .2rem; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--teal); direction: ltr; }
+.el-name { font: 700 1.6rem/1.3 var(--f-ar); margin: .5rem 0 0; }
+.el-name .lat { font-size: 1rem; color: var(--muted); font-weight: 500; }
+.shells { display: flex; gap: .4rem; margin: .5rem 0 .4rem; flex-wrap: wrap; direction: ltr; justify-content: flex-end; }
+.shells span { font: 600 1.05rem var(--f-lat); padding: .1rem .6rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.shells span.last { border-color: var(--brick); color: var(--brick); }
+.verdict { font-size: .98rem; color: var(--ink-2); margin: .3rem 0 0; line-height: 1.8; }
+details.table { margin-top: .9rem; font-size: .92rem; color: var(--ink-2); }
+details.table summary { cursor: pointer; color: var(--muted); font-weight: 600; }
+.tbl { overflow-x: auto; margin-top: .5rem; border: 1px solid var(--rule); border-radius: 4px; max-height: 18rem; }
+.tbl table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.tbl th, .tbl td { padding: .3rem .7rem; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.tbl th { position: sticky; top: 0; background: var(--card); font-weight: 600; }
+
+/* ---------- the close ---------- */
+.close-list { margin: 0 0 1rem; padding: 0; list-style: none; display: grid; gap: .55rem; }
+.close-list li { display: grid; grid-template-columns: 1.8rem 1fr; gap: .4rem; align-items: baseline; }
+.close-list .num { color: var(--brick); font-weight: 700; }
+
+/* ---------- workshop note (for the platform owner, outside the capsule) ---------- */
+.workshop { margin-top: 4.5rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+.workshop h3 { font: 700 1.35rem var(--f-ar); margin: 0 0 .3rem; }
+.workshop > p { color: var(--ink-2); font-size: 1rem; margin: 0 0 1.1rem; }
+.stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+@media (max-width: 760px) { .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stages figure { background: var(--card); border: 1px solid var(--gold); border-radius: 6px; padding: .45rem .45rem .55rem; }
+.stages img { display: block; width: 100%; height: auto; border-radius: 3px; }
+.stages figcaption { margin: .45rem .2rem 0; font-size: .86rem; color: var(--ink-2); line-height: 1.6; }
+.stages figcaption .num { color: var(--teal); font-weight: 700; }
+.foot { margin-top: 2.2rem; font-size: .84rem; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ly { animation: none !important; }
+  .bleed, .develop { transition: none !important; }
+}
+</style>
+
+<div class="rulerbar" id="bar" dir="rtl" lang="ar">
+  <div class="r-read">
+    <div class="r-time">الدقيقة <span class="num" id="rMin">0</span> <span style="color:var(--muted);font-weight:400;font-size:.85rem">من <span class="num">45</span></span></div>
+    <div class="r-sec" id="rSec">البداية</div>
+  </div>
+  <svg id="ruler" role="slider" aria-label="مسطرة الحصة، اضغط للانتقال" tabindex="0" aria-valuemin="0" aria-valuemax="45" aria-valuenow="0"></svg>
+</div>
+
+<main class="wrap" dir="rtl" lang="ar">
+
+  <header class="hero col" data-min="0" data-name="البداية">
+    <p class="kicker">كبسولة تحضير · كيمياء <span class="num">1</span> · الدرس <span class="num">2-1</span></p>
+    <h1>الذرة من الداخل</h1>
+    <p class="dek">بكرة المعلم بيدخل على تركيب الذرة. هذي الكبسولة تخليك تدخل الحصة وأنت عارف وش بيقول قبل لا يقوله.</p>
+    <div class="byline"><span>تصلك قبل الحصة بيوم</span><span><b>7</b> دقائق قراءة</span><span><b>3</b> شفرات</span></div>
+  </header>
+
+  <figure class="paint wide">
+    <div class="frame"><div class="stage bleed" id="desk">
+      <img src="img/desk.jpg" alt="مكتب دراسة بالألوان المائية: مصباح أخضر، كتاب مفتوح بشريط أحمر، دورق فيه سائل أزرق، استكانة شاي، ونافذة يطل منها نخل وقت الغروب" width="1600" height="1000">
+      <img class="ly glow" src="img/desk-glow.jpg" alt="">
+      <img class="ly steam" src="img/desk-steam.jpg" alt="">
+    </div></div>
+    <figcaption>المكتب جاهز، والشاي يبرد. الدرس كله يدور على سؤال واحد: وش اللي يخلي كل عنصر يختلف عن الثاني؟</figcaption>
+  </figure>
+
+  <section class="chapter col" data-min="5" data-name="وش داخل الذرة">
+    <div class="ch-head">
+      <div class="ribbon" aria-hidden="true">1</div>
+      <div><p class="ch-meta">الدقيقة <span class="num">5</span> من الحصة</p><h2>وش داخل الذرة؟</h2></div>
+    </div>
+    <p>تخيّل ملعب الجوهرة. في نص الملعب <strong>النواة</strong>: صغيرة جدًا بس فيها تقريبًا كل الوزن. فيها نوعين لاعبين: <strong>بروتونات</strong> شحنتها موجبة، و<strong>نيوترونات</strong> بلا شحنة.</p>
+    <p>وفي المدرجات حول الملعب تدور <strong>الإلكترونات</strong>: خفيفة جدًا، وشحنتها سالبة. الذرة العادية متعادلة، يعني عدد الإلكترونات في المدرجات يساوي عدد البروتونات في الملعب بالضبط.</p>
+
+    <aside class="cheat">
+      <div class="cheat-big"><div class="big">11</div><div class="unit">صوديوم <span class="lat">Na</span></div></div>
+      <div class="cheat-body">
+        <div class="eye">الشفرة</div>
+        <p>العدد الذري = عدد البروتونات = عدد الإلكترونات في الذرة المتعادلة. تحفظ رقم واحد، تعرف الثلاثة.</p>
+        <div class="sku">CHEM 1 · 2-1 · 01</div>
+      </div>
+    </aside>
+  </section>
+
+  <figure class="paint wide">
+    <div class="frame" style="max-width:40rem;margin-inline:auto"><div class="stage develop" id="atom">
+      <img src="img/atom.jpg" alt="ذرة صوديوم مرسومة: نواة فيها بروتونات حمراء ونيوترونات رمادية، وحولها أغلفة دائرية" width="1000" height="1000">
+      <img class="ly e1" src="img/atom-e1.jpg" alt="">
+      <img class="ly e2" src="img/atom-e2.jpg" alt="">
+      <img class="ly e3" src="img/atom-e3.jpg" alt="">
+    </div></div>
+    <figcaption>ذرة الصوديوم: <span class="num">11</span> بروتون في النواة، و<span class="num">11</span> إلكترون يدورون في ثلاث مدرجات. الإلكترون الوحيد في المدرج الخارجي هو اللي يخلي الصوديوم عصبي في التفاعلات.</figcaption>
+  </figure>
+
+  <section class="chapter col" data-min="15" data-name="المدرجات">
+    <div class="ch-head">
+      <div class="ribbon" aria-hidden="true">2</div>
+      <div><p class="ch-meta">الدقيقة <span class="num">15</span> من الحصة</p><h2>كل مدرج له سعة</h2></div>
+    </div>
+    <p>الإلكترونات ما تجلس على كيفها. المدرج الأول يشبع باثنين، والثاني بثمانية، والثالث يمسك ثمانية في عناصر صفّك. تعبّي من الداخل للخارج، وما تنتقل لمدرج جديد إلا إذا امتلأ اللي قبله.</p>
+
+    <div class="explore">
+      <p class="ex-title">جرّب بنفسك: حرّك العدد الذري</p>
+      <p class="ex-sub">من الهيدروجين إلى الكالسيوم. الإلكترونات البنية هي اللي في المدرج الأخير.</p>
+      <div class="ex-card">
+        <div class="ex-grid">
+          <svg id="atomSvg" viewBox="0 0 300 300" role="img" aria-label="رسم توزيع الإلكترونات"></svg>
+          <div class="ctrl">
+            <label for="z">العدد الذري: <span class="num" id="zOut">11</span></label>
+            <input type="range" id="z" min="1" max="20" value="11" step="1">
+            <p class="el-name" id="elName">صوديوم <span class="lat">Na</span></p>
+            <div class="shells" id="shells"></div>
+            <p class="verdict" id="verdict"></p>
+          </div>
+        </div>
+        <details class="table">
+          <summary>جدول أول عشرين عنصر</summary>
+          <div class="tbl"><table><thead><tr><th>العدد الذري</th><th>العنصر</th><th>التوزيع</th><th>الأخير</th></tr></thead><tbody id="tbody"></tbody></table></div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="cheat">
+      <div class="cheat-big"><div class="big tight">2 · 8 · 8</div><div class="unit">سعة المدرجات</div></div>
+      <div class="cheat-body">
+        <div class="eye">الشفرة</div>
+        <p>عدد الإلكترونات في المدرج الأخير يحدد سلوك العنصر. اللي عنده واحد يبي يتخلص منه، واللي ناقصه واحد يبي ياخذ.</p>
+        <div class="sku">CHEM 1 · 2-1 · 02</div>
+      </div>
+    </aside>
+  </section>
+
+  <figure class="paint wide pin" id="labFig">
+    <div class="pinbox"><div class="frame"><div class="stage bleed" id="lab">
+      <img src="img/lab.jpg" alt="مختبر مدرسي بالألوان المائية: جدول دوري على الجدار، دوارق ملونة، موقد عليه دورق، رف قوارير، ونافذة على نخل" width="2400" height="900">
+      <img class="ly flame" src="img/lab-flame.jpg" alt="">
+      <img class="ly bubbles" src="img/lab-bubbles.jpg" alt="">
+    </div></div>
+    <figcaption>الجدول الدوري على الجدار مرتب بنفس الفكرة: كل صف جديد يعني مدرج جديد يبدأ يتعبّى.</figcaption></div>
+  </figure>
+
+  <section class="chapter col" data-min="30" data-name="فخ الاختبار">
+    <div class="ch-head">
+      <div class="ribbon" aria-hidden="true">3</div>
+      <div><p class="ch-meta">الدقيقة <span class="num">30</span> من الحصة</p><h2>الرقم الكبير مو دايم جوابك</h2></div>
+    </div>
+    <p>تحت رمز العنصر في الجدول بتشوف رقمين. الصغير هو العدد الذري، والكبير هو <strong>العدد الكتلي</strong>: مجموع البروتونات والنيوترونات مع بعض، لأنهم هم اللي في الملعب وهم اللي يوزنون.</p>
+    <p>عشان تطلع عدد النيوترونات: اطرح الصغير من الكبير. الصوديوم <span class="num">23</span> ناقص <span class="num">11</span> يعطيك <span class="num">12</span> نيوترون.</p>
+
+    <aside class="cheat">
+      <div class="cheat-big"><div class="big tight">23 − 11</div><div class="unit">العدد الكتلي ناقص الذري</div></div>
+      <div class="cheat-body">
+        <div class="eye trap">فخ الاختبار</div>
+        <p>إذا سألك عن عدد الإلكترونات وعطاك رقمين، لا تاخذ الكبير. الإلكترونات تمشي مع العدد الذري دايم.</p>
+        <div class="sku">CHEM 1 · 2-1 · 03</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="chapter col" data-min="40" data-name="الخلاصة">
+    <div class="ch-head">
+      <div class="ribbon" aria-hidden="true">4</div>
+      <div><p class="ch-meta">الدقيقة <span class="num">40</span> من الحصة</p><h2>ادخل الحصة بهذي الثلاث</h2></div>
+    </div>
+    <ul class="close-list">
+      <li><span class="num">1</span><span>النواة ثقيلة وفيها بروتونات ونيوترونات، والإلكترونات خفيفة تدور حولها.</span></li>
+      <li><span class="num">2</span><span>المدرجات تتعبّى بالترتيب: <span class="num">2</span> ثم <span class="num">8</span> ثم <span class="num">8</span>.</span></li>
+      <li><span class="num">3</span><span>النيوترونات = العدد الكتلي ناقص العدد الذري.</span></li>
+    </ul>
+  </section>
+
+  <section class="workshop col" data-min="45" data-name="ورشة التجربة">
+    <h3>ورشة التجربة: كيف انرسمت اللوحات</h3>
+    <p>كل لوحة في الصفحة مرسومة بالكود ثم مرّت على محرك ألوان مائية مبني على <bdi class="lat">OpenCV</bdi>، بلا محرك صور. هذي مراحل لوحة المكتب.</p>
+    <div class="stages">
+      <figure><img src="img/desk.stage-1-flat.jpg" alt="الرسم المسطح بألوان صافية" loading="lazy"><figcaption><span class="num">1</span> الرسم المسطح من الكود</figcaption></figure>
+      <figure><img src="img/desk.stage-3-wash.jpg" alt="الغسلة المائية على الورق" loading="lazy"><figcaption><span class="num">2</span> الغسلة: إزاحة، بقع رطبة، تجمّع على الحواف، تلاشٍ</figcaption></figure>
+      <figure><img src="img/desk.stage-4-ink.jpg" alt="خط الحبر وحده" loading="lazy"><figcaption><span class="num">3</span> الحبر: ضغط الريشة، انقطاعات، خط رصاص خفيف تحته</figcaption></figure>
+      <figure><img src="img/desk-small.jpg" alt="اللوحة النهائية" loading="lazy"><figcaption><span class="num">4</span> اللوحة: ورق × غسلة × حبر</figcaption></figure>
+    </div>
+    <p class="foot">نموذج تجريبي لمكتب ماجد، التجربة <span class="num">1</span>. المحتوى مثال والهوية مقاربة.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- arrivals: only paintings below the fold wait; the first frame is complete ---------- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    root.classList.add('js');
+    var arrivals = document.querySelectorAll('.bleed, .develop');
+    var vh = window.innerHeight;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          setTimeout(function () { e.target.classList.remove('pre'); }, 60);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -30% 0px' });
+    arrivals.forEach(function (el) {
+      el.classList.add('pre');
+      var top = el.getBoundingClientRect().top;
+      if (top < vh * .9) { requestAnimationFrame(function () { setTimeout(function () { el.classList.remove('pre'); }, 120); }); }
+      else io.observe(el);
+    });
+  }
+
+  /* ---------- the school ruler ---------- */
+  var svg = document.getElementById('ruler'), bar = document.getElementById('bar');
+  var rMin = document.getElementById('rMin'), rSec = document.getElementById('rSec');
+  var secs = [].slice.call(document.querySelectorAll('[data-min]'));
+  var NS = 'http://www.w3.org/2000/svg', TOTAL = 45, cur = 0, W = 0, H = 40, PAD = 10, marker;
+  function x(m) { return W - PAD - m * (W - 2 * PAD) / TOTAL; }
+  function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function draw() {
+    W = svg.clientWidth; H = svg.clientHeight; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var cs = getComputedStyle(root);
+    svg.appendChild(el('rect', { x: 2, y: 2, width: W - 4, height: H - 4, rx: 3, fill: cs.getPropertyValue('--tape').trim(), opacity: .55 }));
+    var ink = cs.getPropertyValue('--ink-2').trim();
+    for (var m = 0; m <= TOTAL; m++) {
+      var len = m % 5 === 0 ? H * .42 : H * .2;
+      svg.appendChild(el('line', { x1: x(m), x2: x(m), y1: 2, y2: 2 + len, stroke: ink, 'stroke-width': m % 5 === 0 ? 1.2 : .7 }));
+      if (m % 5 === 0 && (W > 420 || m % 15 === 0)) {
+        var t = el('text', { x: x(m), y: H - 6, 'text-anchor': 'middle' }); t.textContent = m; svg.appendChild(t);
+      }
+    }
+    secs.forEach(function (s) {
+      var m = +s.dataset.min, xx = x(m);
+      svg.appendChild(el('path', { d: 'M' + (xx - 4) + ',' + (H - 2) + ' L' + xx + ',' + (H - 9) + ' L' + (xx + 4) + ',' + (H - 2) + ' Z', class: 'sec-mark' }));
+    });
+    marker = el('g', {});
+    var brick = cs.getPropertyValue('--brick').trim();
+    marker.appendChild(el('line', { x1: 0, x2: 0, y1: 0, y2: H, stroke: brick, 'stroke-width': 2.2 }));
+    marker.appendChild(el('rect', { x: -5, y: 0, width: 10, height: 5, fill: brick }));
+    svg.appendChild(marker);
+    place();
+    root.style.setProperty('--barH', bar.offsetHeight + 'px');
+  }
+  function place() { if (marker) marker.setAttribute('transform', 'translate(' + x(cur) + ',0)'); }
+  function update() {
+    var probe = window.innerHeight * .35, i = 0;
+    for (var k = 0; k < secs.length; k++) if (secs[k].getBoundingClientRect().top <= probe) i = k;
+    var a = secs[i], b = secs[i + 1], m = +a.dataset.min;
+    if (b) {
+      var ta = a.getBoundingClientRect().top, tb = b.getBoundingClientRect().top;
+      var p = Math.min(1, Math.max(0, (probe - ta) / Math.max(1, tb - ta)));
+      m = m + p * (+b.dataset.min - m);
+    }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) m = TOTAL;
+    cur = m; place();
+    rMin.textContent = Math.round(m); rSec.textContent = a.dataset.name;
+    svg.setAttribute('aria-valuenow', Math.round(m));
+  }
+  function jump(m) {
+    var best = secs[0];
+    secs.forEach(function (s) { if (+s.dataset.min <= m) best = s; });
+    best.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+  svg.addEventListener('click', function (e) {
+    var r = svg.getBoundingClientRect(), px = e.clientX - r.left;
+    jump((W - PAD - px) / (W - 2 * PAD) * TOTAL);
+  });
+  svg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { jump(Math.min(TOTAL, cur + 5.1)); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { jump(Math.max(0, cur - 5)); e.preventDefault(); }
+  });
+
+  /* ---------- phone: the camera travels across the wide lab painting ---------- */
+  var labFig = document.getElementById('labFig'), labStage = document.getElementById('lab');
+  var phone = window.matchMedia('(max-width: 700px)');
+  function pan() {
+    if (!phone.matches) { labStage.style.transform = ''; return; }
+    var r = labFig.getBoundingClientRect(), barH = bar.offsetHeight;
+    var span = labFig.offsetHeight - (window.innerHeight - barH);
+    var p = Math.min(1, Math.max(0, (barH - r.top) / Math.max(1, span)));
+    var frame = labStage.parentNode, travel = labStage.offsetWidth - frame.clientWidth;
+    labStage.style.transform = 'translateX(' + (-travel * (1 - p)).toFixed(1) + 'px)';
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () { update(); pan(); ticking = false; });
+  }, { passive: true });
+  window.addEventListener('resize', function () { draw(); update(); pan(); });
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener ? mq.addEventListener('change', draw) : mq.addListener(draw));
+    new MutationObserver(draw).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+
+  /* ---------- the stadium explorer ---------- */
+  var names = ['هيدروجين','هيليوم','ليثيوم','بيريليوم','بورون','كربون','نيتروجين','أكسجين','فلور','نيون','صوديوم','مغنيسيوم','ألومنيوم','سيليكون','فوسفور','كبريت','كلور','أرغون','بوتاسيوم','كالسيوم'];
+  var syms = ['H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar','K','Ca'];
+  var CAP = [2, 8, 8, 2];
+  function shellsOf(z) { var out = [], left = z; for (var i = 0; i < CAP.length && left > 0; i++) { var n = Math.min(left, CAP[i]); out.push(n); left -= n; } return out; }
+  function verdictOf(z, sh) {
+    var last = sh[sh.length - 1], cap = CAP[sh.length - 1];
+    if (z === 2 || (last === cap && z !== 20)) return 'المدرج الأخير ممتلي. هذا عنصر رايق ما يحب يتفاعل.';
+    if (last <= 2) return last === 1 ? 'عنده إلكترون واحد بالمدرج الأخير. يبي يعطيه ويرتاح.' : 'عنده اثنين بالمدرج الأخير. يبي يعطيهم ويرتاح.';
+    if (cap - last <= 2) return 'ناقصه ' + (cap - last) + ' عشان يشبع. يبي ياخذ من غيره.';
+    return 'في النص: عنده ' + last + ' بالمدرج الأخير، ويشارك غيره بدل ما يعطي أو ياخذ.';
+  }
+  var asvg = document.getElementById('atomSvg'), R = [52, 84, 116, 144];
+  function drawAtom(z) {
+    var sh = shellsOf(z);
+    while (asvg.firstChild) asvg.removeChild(asvg.firstChild);
+    R.forEach(function (r, i) { asvg.appendChild(el('circle', { cx: 150, cy: 150, r: r, class: 'ring' + (i < sh.length ? ' on' : '') })); });
+    asvg.appendChild(el('circle', { cx: 150, cy: 150, r: 26, class: 'nuc' }));
+    var t = el('text', { x: 150, y: 155, 'text-anchor': 'middle', class: 'nuc-t' }); t.textContent = z + '+'; asvg.appendChild(t);
+    sh.forEach(function (n, i) {
+      for (var k = 0; k < n; k++) {
+        var a = -Math.PI / 2 + 2 * Math.PI * k / n + i * .35;
+        asvg.appendChild(el('circle', { cx: 150 + Math.cos(a) * R[i], cy: 150 + Math.sin(a) * R[i], r: 6.5, class: 'e' + (i === sh.length - 1 ? ' last' : '') }));
+      }
+    });
+    document.getElementById('zOut').textContent = z;
+    document.getElementById('elName').innerHTML = names[z - 1] + ' <span class="lat">' + syms[z - 1] + '</span>';
+    var box = document.getElementById('shells'); box.innerHTML = '';
+    sh.forEach(function (n, i) { var s = document.createElement('span'); s.textContent = n; if (i === sh.length - 1) s.className = 'last'; box.appendChild(s); });
+    document.getElementById('verdict').textContent = verdictOf(z, sh);
+  }
+  var tb = document.getElementById('tbody');
+  for (var z = 1; z <= 20; z++) {
+    var sh = shellsOf(z), tr = document.createElement('tr');
+    tr.innerHTML = '<td class="num">' + z + '</td><td>' + names[z - 1] + ' <span class="lat">' + syms[z - 1] + '</span></td><td class="num" dir="ltr">' + sh.join(' · ') + '</td><td class="num">' + sh[sh.length - 1] + '</td>';
+    tb.appendChild(tr);
+  }
+  var zIn = document.getElementById('z');
+  zIn.addEventListener('input', function () { drawAtom(+zIn.value); });
+  drawAtom(11);
+
+  draw(); update(); pan();
+})();
+</script>

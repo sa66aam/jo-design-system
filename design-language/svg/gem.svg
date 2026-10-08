@@ -1,0 +1,7 @@
+<!-- جوهرة الحال قبل كلمة الشارة (src/styles/gem.css): مركز فاتح من أعلى اليسار، وهالة بسدس اللون. تُلوَّن بـcurrentColor. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+  <defs><radialGradient id="g" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".65"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="7" cy="7" r="6.25" fill="currentColor" opacity=".16"/>
+  <circle cx="7" cy="7" r="4" fill="currentColor"/>
+  <circle cx="7" cy="7" r="4" fill="url(#g)"/>
+</svg>

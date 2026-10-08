@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عيّنة لغة الورق</title>
+<!-- عيّنة تُفتح من المستودع مباشرة: النواة من core-tokens.css، وعائلتان تبدّلان كتلة العائلة وحدها.
+     الرسوم من src/assets/grid (أصول القمّة الحقيقيّة). لا يستوردها التطبيق، وليست حارسا. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&family=Lora:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="core-tokens.css">
+<style>
+  body{ margin:0; font-family:'Noto Naskh Arabic', serif; color:var(--ink); --f:'Noto Naskh Arabic', serif }
+  .fam{ position:relative; isolation:isolate; overflow:hidden; padding:28px 16px 36px }
+  .fam > .desk{ position:absolute; inset:0; z-index:-1 }
+  .fam > .desk::before{ position:absolute }   /* العيّنة تحصر المكتب في عائلتها؛ الصفحة الحقيقيّة تثبّته على الشاشة */
+  .wrap{ max-width:980px; margin:0 auto; display:grid; gap:18px }
+  .hero{ position:relative; isolation:isolate; overflow:hidden; padding:22px 22px 26px; min-height:150px }
+  .hero h1{ margin:0; font-size:30px; line-height:1.35; max-width:64%; font-weight:700 }
+  .hero p{ margin:10px 0 0; max-width:62%; color:var(--muted); line-height:1.8 }
+  .grid{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px }
+  .card{ min-height:150px; padding:18px 20px 16px; display:grid; align-content:space-between; gap:10px }
+  .card h3{ margin:0; font-size:20px; max-width:64% }
+  .card p{ margin:0; max-width:64%; color:var(--muted); font-size:14px; line-height:1.7 }
+  .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+  button{ font:inherit; font-weight:700; padding:11px 20px; cursor:pointer; color:var(--ink) }
+  .card .pl-chip{ justify-self:start }
+  .num{ font-family:var(--f-num); font-size:40px; font-weight:700; line-height:1 }
+  .label{ font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:.2px }
+  .verdict{ display:flex; gap:8px; align-items:center; font-weight:700 }
+  @media (max-width:640px){ .grid{ grid-template-columns:minmax(0, 1fr) } .hero h1{ font-size:24px; max-width:70% } .hero p{ max-width:70% } }
+
+  /* ── العائلة الثانية: مشروع شقيق (تمور فاخرة مثلا). نفس النواة، باليت أخرى، ورسم آخر يُشتقّ منه المكتب. ── */
+  .fam.dates{
+    --ink:#2d241a; --ink-2:#4a3b2a; --muted:#6f6352;
+    --house:#7a4a24; --house-2:#5e3719;
+    --sig:#9a6b2f; --sig-2:#7b5220; --sig-lite:#d9b27a;
+    --pg-base:#f6f1eb; --pg1:#e6d3b6; --pg2:#edddc5; --pg3:#b9a586;   /* من tools/art-palette.py على رسم المستوى */
+  }
+  /* والشكل حرّ داخل النواة: زوايا أنعم، وشبح بخطّ آخر */
+  .fam.dates .pl-paper{ border-radius:28px }
+  .fam.dates .pl-lift, .fam.dates .pl-dyed{ border-radius:999px }
+</style>
+</head>
+<body>
+
+<section class="fam qimma" aria-label="القمّة">
+  <div class="desk pl-desk" style="--pg-base:#f3ede8; --pg1:#d3c1db; --pg2:#ecd6d6; --pg3:#9a819b"></div>
+  <div class="wrap">
+    <header class="hero pl-paper pl-ghost" data-n="5" style="--tone:var(--t-models)">
+      <img class="pl-stamp" src="grid/models.webp" alt="">
+      <h1><span class="pl-mark">النماذج</span></h1>
+      <p>عائلة القمّة: مكتب مائيّ من رسم القسم، وورقة بيضاء دافئة عليه، ورقم شبح بعُشر النغمة.</p>
+    </header>
+    <div class="grid">
+      <article class="card pl-paper pl-card" style="--tone:var(--t-level)">
+        <img class="pl-art" src="grid/level.webp" alt="">
+        <div><h3 class="pl-pen">تحديد المستوى</h3><p>الرسم في خانته، مطبوع بالضرب.</p></div>
+        <span class="pl-chip" style="--gm:var(--ok)">مكتمل</span>
+      </article>
+      <article class="card pl-paper pl-card">
+        <img class="pl-art" src="grid/errors.webp" alt="">
+        <div><span class="label">أخطاء مفتوحة</span><div class="num">14</div></div>
+        <span class="pl-chip" style="--gm:var(--watch)">راقب</span>
+      </article>
+      <article class="card pl-paper pl-card">
+        <img class="pl-art" src="grid/fresh.webp" alt="">
+        <div class="verdict" style="color:var(--ok)"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="32" cy="32" r="29" stroke-width="1.2" opacity=".35"/>
+  <circle cx="32" cy="32" r="24" stroke-width="2.2"/>
+  <circle cx="32" cy="32" r="20.5" stroke-width=".8" stroke-dasharray="1.5 3" opacity=".6"/>
+  <path d="M23 32.5l6 6 12-13" stroke-width="3"/>
+</svg> صحيح</div>
+        <div class="verdict" style="color:var(--bad)">× غلط</div>
+      </article>
+    </div>
+    <div class="row">
+      <button class="pl-dyed">ابدأ النموذج</button>
+      <button class="pl-lift">سجلّي</button>
+      <button class="pl-lift on" style="--tone:var(--t-models)">المختار</button>
+    </div>
+  </div>
+</section>
+
+<section class="fam dates" aria-label="مشروع شقيق">
+  <div class="desk pl-desk"></div>
+  <div class="wrap">
+    <header class="hero pl-paper pl-ghost" data-n="3" style="--tone:var(--sig)">
+      <img class="pl-stamp" src="grid/golden.webp" alt="">
+      <h1><span class="pl-mark">مجموعة الموسم</span></h1>
+      <p>مشروع شقيق: نفس المنطق (ورق على مكتب مائيّ، رسم مدموج، زرّ مصبوغ واحد)، بباليت أخرى وزوايا أنعم.</p>
+    </header>
+    <div class="grid">
+      <article class="card pl-paper pl-card" style="--tone:var(--sig)">
+        <img class="pl-art" src="grid/golden.webp" alt="">
+        <div><h3 class="pl-pen">صندوق فاخر</h3><p>نفس الخانة ونفس الضرب.</p></div>
+        <span class="pl-chip" style="--gm:var(--chance)">جديد</span>
+      </article>
+      <article class="card pl-paper pl-card">
+        <img class="pl-art" src="grid/level.webp" alt="">
+        <div><span class="label">طلبات اليوم</span><div class="num">38</div></div>
+        <span class="pl-chip" style="--gm:var(--ok)">سليم</span>
+      </article>
+      <article class="card pl-paper pl-card">
+        <img class="pl-art" src="grid/lafzi.webp" alt="">
+        <div><h3>بطاقة إهداء</h3><p>الشارة ورقة صغيرة وجوهرة.</p></div>
+        <span class="pl-chip" style="--gm:var(--house)">مخصّص</span>
+      </article>
+    </div>
+    <div class="row">
+      <button class="pl-dyed">اطلب الآن</button>
+      <button class="pl-lift">المفضّلة</button>
+      <button class="pl-lift on" style="--tone:var(--sig)">المختار</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

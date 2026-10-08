@@ -21,3 +21,7 @@ build/
 # Claude session artifacts that may end up here during drafting
 .sandbox_trash/
 *.tmp
+
+# transfer staging from Cowork sessions
+_incoming-*/
+.DS_Store
